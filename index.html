@@ -1,0 +1,512 @@
+<title>HQ Plan 5 Zones</title>
+<style>
+  :root{
+    --ink:#10120d;
+    --panel:#181b13;
+    --panel-2:#1f2317;
+    --line:#3a3e2e;
+    --mud-1:#8b5a34; --mud-2:#7c4d2b; --mud-3:#96683f; --mud-4:#6e4526;
+    --moss-1:#3b5127; --moss-2:#4f6b3c; --moss-3:#65875a; --moss-4:#7ba171; --moss-5:#93bd8b;
+    --beyond:#2a2c22;
+    --signal:#d6a544;
+    --signal-dim:#a67f36;
+    --paper:#ece7d8;
+    --muted:#9c9884;
+    --sec-1:#c0503b; --sec-2:#ba8a2e; --sec-3:#4f9070; --sec-4:#3f7fa0; --sec-5:#7f63ab;
+    --absent:#5a564c;
+    --mud-dark:#4a2f1a;
+    --font-display:"Bahnschrift","SF Compact Condensed","Arial Narrow",sans-serif;
+    --font-body:"Segoe UI",system-ui,-apple-system,sans-serif;
+    --font-mono:"Cascadia Mono","SF Mono",ui-monospace,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --ink:#eee7d2;
+      --panel:#f4eeda;
+      --panel-2:#ece3ca;
+      --line:#c9bd9a;
+      --mud-1:#a06f42; --mud-2:#8f5f36; --mud-3:#b17c4d; --mud-4:#7d5330;
+      --moss-1:#5a7642; --moss-2:#6d8a54; --moss-3:#82a06a; --moss-4:#98b880; --moss-5:#aecf97;
+      --beyond:#ddd3b6;
+      --signal:#a06a1c;
+      --signal-dim:#8a5a17;
+      --paper:#2a2718;
+      --muted:#6b6650;
+      --sec-1:#a33f2c; --sec-2:#9c7220; --sec-3:#367557; --sec-4:#2c6480; --sec-5:#63488c;
+      --absent:#9e9685;
+      --mud-dark:#5c3a1c;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#10120d; --panel:#181b13; --panel-2:#1f2317; --line:#3a3e2e;
+    --mud-1:#8b5a34; --mud-2:#7c4d2b; --mud-3:#96683f; --mud-4:#6e4526;
+    --moss-1:#3b5127; --moss-2:#4f6b3c; --moss-3:#65875a; --moss-4:#7ba171; --moss-5:#93bd8b;
+    --beyond:#2a2c22; --signal:#d6a544; --signal-dim:#a67f36;
+    --paper:#ece7d8; --muted:#9c9884;
+    --sec-1:#c0503b; --sec-2:#ba8a2e; --sec-3:#4f9070; --sec-4:#3f7fa0; --sec-5:#7f63ab;
+    --absent:#5a564c;
+    --mud-dark:#4a2f1a;
+  }
+  :root[data-theme="light"]{
+    --ink:#eee7d2; --panel:#f4eeda; --panel-2:#ece3ca; --line:#c9bd9a;
+    --mud-1:#a06f42; --mud-2:#8f5f36; --mud-3:#b17c4d; --mud-4:#7d5330;
+    --moss-1:#5a7642; --moss-2:#6d8a54; --moss-3:#82a06a; --moss-4:#98b880; --moss-5:#aecf97;
+    --beyond:#ddd3b6; --signal:#a06a1c; --signal-dim:#8a5a17;
+    --paper:#2a2718; --muted:#6b6650;
+    --sec-1:#a33f2c; --sec-2:#9c7220; --sec-3:#367557; --sec-4:#2c6480; --sec-5:#63488c;
+    --absent:#9e9685;
+    --mud-dark:#5c3a1c;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at 20% -10%, color-mix(in srgb, var(--signal) 10%, transparent), transparent 55%),
+      var(--ink);
+    color:var(--paper);
+    font-family:var(--font-body);
+    line-height:1.5;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:2.75rem 1.5rem 4rem;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--signal);
+    display:flex;align-items:center;gap:.6em;
+  }
+  .eyebrow::before{content:"";width:1.6em;height:1px;background:var(--signal-dim);}
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-stretch:condensed;
+    font-size:clamp(1.7rem,4vw,2.5rem);
+    letter-spacing:.01em;
+    margin:.35em 0 .3em;
+    text-wrap:balance;
+  }
+  .lede{color:var(--muted);max-width:62ch;font-size:1rem;}
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin:2.25rem 0 2rem;
+  }
+  .stat{
+    background:var(--panel);
+    padding:1.1rem 1.2rem;
+    display:flex;flex-direction:column;gap:.3em;
+  }
+  .stat .k{
+    font-family:var(--font-mono);
+    font-size:.68rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .stat .v{
+    font-family:var(--font-mono);
+    font-variant-numeric:tabular-nums;
+    font-size:1.9rem;
+    color:var(--signal);
+    line-height:1.1;
+  }
+  .stat .s{font-size:.78rem;color:var(--muted);}
+  .stat.total .v{color:var(--paper);}
+  .stat.total{background:var(--panel-2);}
+
+  .frame{
+    position:relative;
+    border:1px solid var(--line);
+    background:var(--panel);
+    padding:1.25rem;
+  }
+  .frame::before,.frame::after,.frame .c3,.frame .c4{
+    content:"";position:absolute;width:14px;height:14px;
+    border-color:var(--signal-dim);
+  }
+  .frame::before{top:-1px;left:-1px;border-top:2px solid var(--signal-dim);border-left:2px solid var(--signal-dim);}
+  .frame::after{top:-1px;right:-1px;border-top:2px solid var(--signal-dim);border-right:2px solid var(--signal-dim);}
+  .frame .c3{bottom:-1px;left:-1px;border-bottom:2px solid var(--signal-dim);border-left:2px solid var(--signal-dim);}
+  .frame .c4{bottom:-1px;right:-1px;border-bottom:2px solid var(--signal-dim);border-right:2px solid var(--signal-dim);}
+
+  .mapTitle{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 .9rem;
+    display:flex;justify-content:space-between;gap:1em;flex-wrap:wrap;
+  }
+  .mapTitle b{color:var(--paper);font-weight:600;letter-spacing:.05em;}
+
+  .mapScroll{
+    overflow:auto;
+    max-width:100%;
+    display:flex;
+    justify-content:center;
+    background:color-mix(in srgb, var(--ink) 70%, black 10%);
+    border:1px solid var(--line);
+  }
+  :root[data-theme="light"] .mapScroll, @media (prefers-color-scheme:light){.mapScroll{background:color-mix(in srgb, var(--ink) 85%, white 8%);}}
+  canvas{display:block;}
+
+  .legend{
+    display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;
+    margin-top:1rem;
+    font-size:.82rem;
+  }
+  .legend .item{display:flex;align-items:center;gap:.55em;color:var(--muted);}
+  .legend .sw{width:14px;height:14px;flex:none;border:1px solid var(--line);}
+  .legend .sw.qg{border-radius:50%;background:var(--signal);border-color:color-mix(in srgb, var(--signal) 60%, black);}
+
+  .squads{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:1.1rem;
+    font-size:.85rem;
+  }
+  .squads th{
+    font-family:var(--font-mono);
+    font-size:.66rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:left;
+    padding:.4em .6em;
+    border-bottom:1px solid var(--line);
+  }
+  .squads td{
+    padding:.45em .6em;
+    border-bottom:1px solid var(--line);
+    font-variant-numeric:tabular-nums;
+  }
+  .squads td:first-child{display:flex;align-items:center;gap:.55em;}
+  .squads .sw{width:12px;height:12px;flex:none;border:1px solid var(--line);}
+
+  .notes{
+    margin-top:2.25rem;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (min-width:640px){.notes{grid-template-columns:1.1fr 1fr;}}
+  .note{background:var(--panel);padding:1.2rem 1.3rem;}
+  .note h2{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.05rem;
+    margin:0 0 .55em;
+    color:var(--signal);
+  }
+  .note p{margin:.5em 0;color:var(--muted);font-size:.92rem;max-width:52ch;}
+  .note code{
+    font-family:var(--font-mono);
+    background:var(--panel-2);
+    padding:.1em .4em;
+    color:var(--paper);
+    font-size:.85em;
+  }
+  .note ul{margin:.5em 0;padding-left:1.1em;color:var(--muted);font-size:.92rem;}
+  .note li{margin:.3em 0;}
+
+  footer{
+    margin-top:2rem;
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    color:var(--muted);
+    letter-spacing:.03em;
+  }
+
+  @media (prefers-reduced-motion:no-preference){
+    .stat,.frame{transition:border-color .2s ease;}
+  }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Capital Siege — SvS Planning</p>
+  <h1>HQ Coverage — 5-Zone Squad Assignment</h1>
+  <p class="lede">Same non-touching, fully-blocking lattice as before (minimum center-to-center distance of 5 hexagons), but the ring is now split into <b>5 equal 72° zones</b> — one per alliance — instead of 6. Each zone gets one color; within a zone, HQs are ordered from the center outward and only the first 75 are assigned to a squad — anything past that cap is shown in gray.</p>
+
+  <div class="stats" id="stats">
+    <div class="stat"><span class="k">Mud Zone</span><span class="v" id="v-mud">—</span><span class="s" id="s-mud">—</span></div>
+    <div class="stat"><span class="k">Grass · 5 HQ Layers</span><span class="v" id="v-grass">—</span><span class="s" id="s-grass">—</span></div>
+    <div class="stat total"><span class="k">Total to Place</span><span class="v" id="v-total">—</span><span class="s" id="s-total">—</span></div>
+    <div class="stat"><span class="k">Active Players Needed</span><span class="v" id="v-players">—</span><span class="s" id="s-players">—</span></div>
+  </div>
+
+  <div class="frame">
+    <span class="c3"></span><span class="c4"></span>
+    <p class="mapTitle"><b>Diagram — Mud (18 rings) + 5 HQ Layers in Grass · 5-Zone Squad Assignment</b><span id="mapMeta"></span></p>
+    <div class="mapScroll"><canvas id="map"></canvas></div>
+    <div class="legend">
+      <span class="item"><span class="sw" style="background:var(--sec-1)"></span>Zone 1 — occupied HQ</span>
+      <span class="item"><span class="sw" style="background:var(--sec-2)"></span>Zone 2 — occupied HQ</span>
+      <span class="item"><span class="sw" style="background:var(--sec-3)"></span>Zone 3 — occupied HQ</span>
+      <span class="item"><span class="sw" style="background:var(--sec-4)"></span>Zone 4 — occupied HQ</span>
+      <span class="item"><span class="sw" style="background:var(--sec-5)"></span>Zone 5 — occupied HQ</span>
+      <span class="item"><span class="sw" style="background:var(--absent)"></span>Missing HQ (past the 75 squad cap)</span>
+      <span class="item"><span class="sw" style="background:var(--mud-dark);opacity:.62"></span>Mud — empty buffer</span>
+      <span class="item"><span class="sw" style="background:var(--moss-2);opacity:.34"></span>Grass — empty buffer</span>
+      <span class="item"><span class="sw qg"></span>HQ placed (center)</span>
+      <span class="item"><span class="sw" style="background:var(--signal-dim);opacity:.7"></span>Capital + turrets (excluded)</span>
+      <span class="item"><span class="sw" style="background:var(--beyond)"></span>Beyond (out of plan)</span>
+    </div>
+
+    <table class="squads" id="squadTable">
+      <thead><tr><th>Zone</th><th>HQ Count</th><th>Packs of 75 (center → out)</th></tr></thead>
+      <tbody id="squadBody"></tbody>
+    </table>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h2>Placement Rule</h2>
+      <p>Lattice generated by <code>v1=(3,2)</code> and <code>v2=(−2,5)</code> in axial coordinates — a minimum center-to-center distance of 5 hexagons. Every solid tile on the diagram is a hexagon actually occupied by an HQ (distance ≤1 from its center); every pale tile is an empty hexagon, deliberately left as a buffer because it's still within distance ≤2 of an HQ.</p>
+      <p>That distance ≤2 is what blocks the enemy: to insert an HQ, they'd need a center at distance ≥3 from every neighboring HQ — this lattice never leaves that much room.</p>
+      <p>One HQ layer in Grass = a band of 5 hex rings (the lattice's center-to-center spacing). Hence Grass = rings 36–40, 41–45, 46–50, 51–55, 56–60.</p>
+      <p>The ring is split into 5 equal 72° zones around the center, Zone 1 centered due east, then clockwise. Each zone is one color on the diagram; the table below batches its HQs into squads of 75, ordered from the center outward — anything past 75 turns gray.</p>
+    </div>
+    <div class="note">
+      <h2>Model Limitations</h2>
+      <ul>
+        <li>5 hexagons is the absolute minimum gap that still prevents insertion — any closer (distance 3 or 4) and either HQs touch, or an insertable gap reappears.</li>
+        <li>5 zones don't align with the hexagon's 6 natural corners, so zone boundaries cut across the shape asymmetrically — purely a squad-organization choice, not a geometric one.</li>
+        <li>At the inner/outer edges of the ring, a few buffer tiles spill one hexagon into the Capital zone or beyond the grass — negligible in practice.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>Exact calculation — Mud: 150 HQ (2,862 terrain hexes) · Grass 5 HQ layers: 378 HQ (rings 36–60) · minimum gap 5 hex, blocking radius 2 (mathematical optimum) · 5 zones, squads of 75</footer>
+</div>
+
+<script>
+(function(){
+  function hexDist(q,r){
+    var s=-q-r;
+    return Math.max(Math.abs(q),Math.max(Math.abs(r),Math.abs(s)));
+  }
+  // sparsest non-touching lattice that still blocks all enemy insertion:
+  // i=3,j=2 -> spacing 5 (never touching), covering radius exactly 2 (proven optimal)
+  var LI=3, LJ=2;
+  function latticePoint(m,n){ return [LI*m-LJ*n, LJ*m+(LI+LJ)*n]; }
+
+  var CORE_MAX=17, MUD_MAX=35, L1_MAX=40, L2_MAX=45, L3_MAX=50, L4_MAX=55, L5_MAX=60, BEYOND_MAX=63;
+  var ZONE_COUNT=5;
+
+  // gather cells
+  var cells=[];
+  for(var q=-BEYOND_MAX; q<=BEYOND_MAX; q++){
+    for(var r=-BEYOND_MAX; r<=BEYOND_MAX; r++){
+      var d=hexDist(q,r);
+      if(d<=BEYOND_MAX) cells.push({q:q,r:r,d:d});
+    }
+  }
+
+  // unit-size bounding box
+  var minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+  cells.forEach(function(c){
+    var x=Math.sqrt(3)*(c.q+c.r/2), y=1.5*c.r;
+    c.ux=x; c.uy=y;
+    if(x<minX)minX=x; if(x>maxX)maxX=x;
+    if(y<minY)minY=y; if(y>maxY)maxY=y;
+  });
+  var unitW=maxX-minX, unitH=maxY-minY;
+  var TARGET_W=760;
+  var size=TARGET_W/unitW;
+  size=Math.max(4, Math.min(size, 11));
+  var pad=size*1.6;
+  var W=unitW*size+pad*2, H=unitH*size+pad*2;
+
+  var css=getComputedStyle(document.documentElement);
+  function tok(name){ return css.getPropertyValue(name).trim(); }
+
+  var colors={
+    core: tok('--signal-dim'),
+    mud: tok('--mud-2'),
+    grass: [tok('--moss-1'),tok('--moss-2'),tok('--moss-3'),tok('--moss-4'),tok('--moss-5')],
+    beyond: tok('--beyond'),
+    line: tok('--line'),
+    signal: tok('--signal'),
+    signalDim: tok('--signal-dim'),
+    sector: [tok('--sec-1'),tok('--sec-2'),tok('--sec-3'),tok('--sec-4'),tok('--sec-5')],
+    absent: tok('--absent'),
+    mudDark: tok('--mud-dark')
+  };
+
+  function hexCorners(cx,cy,s){
+    var pts=[];
+    for(var i=0;i<6;i++){
+      var ang=Math.PI/180*(60*i+30);
+      pts.push([cx+s*Math.cos(ang), cy+s*Math.sin(ang)]);
+    }
+    return pts;
+  }
+
+  var canvas=document.getElementById('map');
+  var dpr=window.devicePixelRatio||1;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  var ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  function px(c){ return [ (c.ux-minX)*size+pad, (c.uy-minY)*size+pad ]; }
+
+  var cellByKey={};
+  cells.forEach(function(c){ cellByKey[c.q+','+c.r]=c; });
+
+  // enumerate every placed HQ (mud + 5 grass layers) on the non-touching, fully-blocking lattice
+  var placed=[];
+  var mR=26;
+  for(var m=-mR;m<=mR;m++){
+    for(var n=-mR;n<=mR;n++){
+      var lp=latticePoint(m,n);
+      var d=hexDist(lp[0],lp[1]);
+      var zone=null;
+      if(d>=18 && d<=MUD_MAX) zone='mud';
+      else if(d<=L1_MAX) zone='g1';
+      else if(d<=L2_MAX) zone='g2';
+      else if(d<=L3_MAX) zone='g3';
+      else if(d<=L4_MAX) zone='g4';
+      else if(d<=L5_MAX) zone='g5';
+      if(zone){
+        var pux=Math.sqrt(3)*(lp[0]+lp[1]/2), puy=1.5*lp[1];
+        var angleDeg = (Math.atan2(puy,pux)*180/Math.PI + 360) % 360;
+        var sector = Math.round(angleDeg/(360/ZONE_COUNT)) % ZONE_COUNT; // 5 equal 72° zones
+        placed.push({q:lp[0], r:lp[1], zone:zone, sector:sector});
+      }
+    }
+  }
+
+  // batch each zone into squads of 75, center-outward; anything past the first 75 has no assigned player
+  var PACK_SIZE=75;
+  var sectorGroups=[];
+  for(var z=0; z<ZONE_COUNT; z++) sectorGroups.push([]);
+  placed.forEach(function(pt){ sectorGroups[pt.sector].push(pt); });
+  sectorGroups.forEach(function(group){
+    group.sort(function(a,b){ return hexDist(a.q,a.r)-hexDist(b.q,b.r); });
+    group.forEach(function(pt,idx){ pt.missing = idx>=PACK_SIZE; });
+  });
+
+  // pass 1: fill zone cells — solid = HQ footprint, colored by which of the 5 zones it belongs to; pale = empty buffer (blocked but unbuilt)
+  cells.forEach(function(c){
+    var p=px(c);
+    var fill, alpha=1;
+    if(c.d<=CORE_MAX){
+      fill=colors.core;
+    } else if(c.d<=L5_MAX){
+      var nearest=Infinity, owner=null;
+      for(var k=0;k<placed.length;k++){
+        var pd=hexDist(c.q-placed[k].q, c.r-placed[k].r);
+        if(pd<nearest){ nearest=pd; owner=placed[k]; if(nearest<=1) break; }
+      }
+      if(nearest<=1){
+        fill = owner.missing ? colors.absent : colors.sector[owner.sector];
+        alpha = 1;
+      } else if(c.d<=MUD_MAX){
+        fill = colors.mudDark;
+        alpha = 0.62;
+      } else {
+        var layerIdx = c.d<=L1_MAX?0 : c.d<=L2_MAX?1 : c.d<=L3_MAX?2 : c.d<=L4_MAX?3 : 4;
+        fill = colors.grass[layerIdx];
+        alpha = 0.34;
+      }
+    } else {
+      fill=colors.beyond;
+    }
+    var pts=hexCorners(p[0],p[1],size*0.98);
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0],pts[0][1]);
+    for(var i=1;i<6;i++) ctx.lineTo(pts[i][0],pts[i][1]);
+    ctx.closePath();
+    ctx.globalAlpha=alpha;
+    ctx.fillStyle=fill;
+    ctx.fill();
+    ctx.lineWidth=Math.max(0.4, size*0.05);
+    ctx.strokeStyle=colors.line;
+    ctx.globalAlpha=alpha*0.5;
+    ctx.stroke();
+    ctx.globalAlpha=1;
+  });
+
+  // pass 2: QG markers
+  var hqMud=0, hqG1=0, hqG2=0, hqG3=0, hqG4=0, hqG5=0;
+  placed.forEach(function(pt){
+    if(pt.zone==='mud') hqMud++;
+    else if(pt.zone==='g1') hqG1++;
+    else if(pt.zone==='g2') hqG2++;
+    else if(pt.zone==='g3') hqG3++;
+    else if(pt.zone==='g4') hqG4++;
+    else if(pt.zone==='g5') hqG5++;
+    var c=cellByKey[pt.q+','+pt.r];
+    if(!c) return;
+    var p=px(c);
+    ctx.beginPath();
+    ctx.arc(p[0],p[1], size*0.42, 0, Math.PI*2);
+    ctx.fillStyle=colors.signal;
+    ctx.fill();
+    ctx.lineWidth=Math.max(0.5,size*0.08);
+    ctx.strokeStyle='rgba(0,0,0,.55)';
+    ctx.stroke();
+  });
+
+  // capital marker
+  var capCell=cellByKey['0,0'];
+  if(capCell){
+    var cp=px(capCell);
+    ctx.beginPath();
+    ctx.arc(cp[0],cp[1], size*0.65, 0, Math.PI*2);
+    ctx.fillStyle='transparent';
+    ctx.lineWidth=Math.max(1,size*0.15);
+    ctx.strokeStyle=colors.signal;
+    ctx.stroke();
+  }
+
+  // stats
+  var mudArea=0, grassArea=0;
+  cells.forEach(function(c){
+    if(c.d>CORE_MAX && c.d<=MUD_MAX) mudArea++;
+    else if(c.d>MUD_MAX && c.d<=L5_MAX) grassArea++;
+  });
+  var hqGrass=hqG1+hqG2+hqG3+hqG4+hqG5;
+
+  document.getElementById('v-mud').textContent=hqMud+' HQ';
+  document.getElementById('s-mud').textContent=mudArea.toLocaleString('en-US')+' terrain hexagons';
+  document.getElementById('v-grass').textContent=hqGrass+' HQ';
+  document.getElementById('s-grass').textContent=hqG1+' + '+hqG2+' + '+hqG3+' + '+hqG4+' + '+hqG5+' (rings 36–60)';
+  var totalHQ=hqMud+hqGrass;
+  document.getElementById('v-total').textContent=totalHQ+' HQ';
+  document.getElementById('s-total').textContent='min. gap 5 hex · no HQ touching · no insertion possible';
+
+  // roster size needed if 1 in 4 players is unavailable at any given time (75% availability)
+  var AVAILABILITY=0.75;
+  var playersNeeded=Math.ceil(totalHQ/AVAILABILITY);
+  document.getElementById('v-players').textContent=playersNeeded.toLocaleString('en-US');
+  document.getElementById('s-players').textContent='roster size for '+totalHQ+' active HQ at 75% availability (1 in 4 out)';
+
+  document.getElementById('mapMeta').textContent='radius 0–'+BEYOND_MAX+' · '+cells.length.toLocaleString('en-US')+' hexagons shown';
+
+  // squad table — 5 zones, already ordered center-outward and flagged past the 75-cap
+  var squadBody=document.getElementById('squadBody');
+  sectorGroups.forEach(function(group,idx){
+    var count=group.length;
+    var assigned=Math.min(count,PACK_SIZE);
+    var missingCount=count-assigned;
+    var packDesc = missingCount>0 ? ('75 assigned + '+missingCount+' gray/missing') : (count+' assigned (no gray)');
+    var row=document.createElement('tr');
+    row.innerHTML = '<td><span class="sw" style="background:'+colors.sector[idx]+'"></span>Zone '+(idx+1)+'</td>'+
+                    '<td>'+count+' HQ</td>'+
+                    '<td>'+packDesc+'</td>';
+    squadBody.appendChild(row);
+  });
+})();
+</script>
